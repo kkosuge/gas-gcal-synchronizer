@@ -1,5 +1,8 @@
-Googleアカウント間の予定を招待しあって同期するGoogle Apps Scriptです。
+# gas-gcal-synchronizer
+複数アカウントでGoogleカレンダーの予定を同期するGoogle Apps Script
 
+
+## 使い方
 ### Google Apps Script へ登録する
 
 ```
