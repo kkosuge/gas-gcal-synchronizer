@@ -1,0 +1,6 @@
+{
+  "scriptId": "your-script-id",
+  "rootDir": "./src",
+  "fileExtension": "ts",
+  "filePushOrder": ["main.ts"]
+}
