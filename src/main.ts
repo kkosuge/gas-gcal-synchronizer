@@ -46,19 +46,6 @@ export function shouldUpdateEvent(event: Event): boolean {
 
   const targetEmails = getTargetEmails()
   const { attendees } = event
-  const { responseStatus, optional } = selfAttendeeStatus(event)
-  const targetAttendees = attendees.filter((a) =>
-    targetEmails.some((email) => a.email === email)
-  )
-  const shouldUpdateTargetAtendees = targetAttendees.some(
-    (a) =>
-      a.responseStatus !== responseStatus || (a.optional === true) !== optional
-  )
-
-  if (shouldUpdateTargetAtendees) {
-    console.log('This event status needs to be updated: ', event.id)
-    return true
-  }
 
   const newEmails = targetEmails.filter(
     (email) => !attendees.some((a) => a.email === email)
@@ -100,12 +87,12 @@ export function main() {
   const events = Calendar.Events.list(calendarId, { syncToken: nextSyncToken })
   const targetEmails = getTargetEmails()
 
-  events.items.forEach((event) => {
+  for (const event of events.items) {
     console.log('event: ', event)
 
     if (!shouldUpdateEvent(event)) {
       console.log('This event does not need to be updated: ', event.id)
-      return
+      continue
     }
 
     const prevAttendees: EventAttendee[] = event.attendees || []
@@ -154,7 +141,7 @@ export function main() {
     } catch (e) {
       console.error(e)
     }
-  })
+  }
 
   const newSyncToken = getNextSyncToken()
   properties.setProperty('nextSyncToken', newSyncToken)

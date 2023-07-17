@@ -75,7 +75,7 @@ describe('shouldUpdateEvent', () => {
             { email: targetEmail },
           ],
         })
-      ).toBe(true)
+      ).toBe(false)
 
       expect(
         shouldUpdateEvent({
@@ -89,16 +89,7 @@ describe('shouldUpdateEvent', () => {
             { email: targetEmail, responseStatus: 'needsResponse' },
           ],
         })
-      ).toBe(true)
-    })
-
-    test('attendees が含まれている場合、自身が存在しない場合は異常', () => {
-      expect(() =>
-        shouldUpdateEvent({
-          ...eventDefault,
-          attendees: [{ email: targetEmail, responseStatus: 'needsResponse' }],
-        })
-      ).toThrowError()
+      ).toBe(false)
     })
   })
 
@@ -130,9 +121,7 @@ describe('shouldUpdateEvent', () => {
           ],
         })
       ).toBe(false)
-    })
 
-    test('更新の必要がある', () => {
       expect(
         shouldUpdateEvent({
           organizer: { email: 'someone@example.com' },
@@ -150,7 +139,7 @@ describe('shouldUpdateEvent', () => {
             },
           ],
         })
-      ).toBe(true)
+      ).toBe(false)
 
       expect(
         shouldUpdateEvent({
@@ -168,7 +157,7 @@ describe('shouldUpdateEvent', () => {
             },
           ],
         })
-      ).toBe(true)
+      ).toBe(false)
     })
   })
 })
@@ -506,7 +495,7 @@ describe('main', () => {
     )
   })
 
-  test('ターゲットが招待済みでも自身の状態に合わせる', () => {
+  test('ターゲットが招待済みでも自身の状態に合わせる（update: 状態の同期は廃止）', () => {
     const event: Event = {
       id,
       etag,
@@ -591,19 +580,19 @@ describe('main', () => {
     }
 
     expect(main()).toBe(undefined)
-    expect(update).toBeCalled()
-    expect(update).toBeCalledWith(
-      nextEvent,
-      calendarId,
-      id,
-      {
-        sendUpdates: 'none',
-      },
-      { 'If-Match': etag }
-    )
+    expect(update).toBeCalledTimes(0)
+    // expect(update).toBeCalledWith(
+    //   nextEvent,
+    //   calendarId,
+    //   id,
+    //   {
+    //     sendUpdates: 'none',
+    //   },
+    //   { 'If-Match': etag }
+    // )
   })
 
-  test('ターゲットが招待済みでも自身の状態に合わせる', () => {
+  test('ターゲットが招待済みでも自身の状態に合わせる（update: 状態の同期は廃止）', () => {
     const event: Event = {
       id,
       etag,
@@ -688,16 +677,16 @@ describe('main', () => {
     }
 
     expect(main()).toBe(undefined)
-    expect(update).toBeCalled()
-    expect(update).toBeCalledWith(
-      nextEvent,
-      calendarId,
-      id,
-      {
-        sendUpdates: 'none',
-      },
-      { 'If-Match': etag }
-    )
+    expect(update).toBeCalledTimes(0)
+    // expect(update).toBeCalledWith(
+    //   nextEvent,
+    //   calendarId,
+    //   id,
+    //   {
+    //     sendUpdates: 'none',
+    //   },
+    //   { 'If-Match': etag }
+    // )
   })
 
   test('その他のイベントデータはそのままアップデートに渡す', () => {
