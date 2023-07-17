@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tsc",
+    "build": "tsc src/main.ts",
     "deploy": "clasp push",
     "test": "vitest"
   },
